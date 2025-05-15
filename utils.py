@@ -7,6 +7,7 @@ Utility functions for common tasks
 import os
 import random
 import time
+import string
 from datetime import datetime
 
 
@@ -85,6 +86,42 @@ def time_function(func, *args, **kwargs):
     return result, execution_time
 
 
+def generate_random_password(length=12, include_special=True):
+    """Generate a random password with the specified length
+    
+    Args:
+        length (int): Length of the password to generate
+        include_special (bool): Whether to include special characters
+        
+    Returns:
+        str: Random password
+    """
+    # Define character sets
+    letters = string.ascii_letters
+    digits = string.digits
+    special_chars = string.punctuation if include_special else ""
+    
+    # Combine all characters
+    all_chars = letters + digits + special_chars
+    
+    # Ensure we have at least one of each type
+    password = [
+        random.choice(letters),
+        random.choice(digits)
+    ]
+    
+    if include_special:
+        password.append(random.choice(special_chars))
+    
+    # Fill the rest randomly
+    password.extend(random.choice(all_chars) for _ in range(length - len(password)))
+    
+    # Shuffle the password
+    random.shuffle(password)
+    
+    return ''.join(password)
+
+
 # Example usage
 if __name__ == "__main__":
     print(f"Random number: {generate_random_number(1, 10)}")
@@ -96,3 +133,7 @@ if __name__ == "__main__":
     # Time a function
     result, time_taken = time_function(calculate_fibonacci, 30)
     print(f"Result: {result}, Time taken: {time_taken:.6f} seconds")
+    
+    # Generate a random password
+    password = generate_random_password()
+    print(f"Random password: {password}")
